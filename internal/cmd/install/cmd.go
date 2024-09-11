@@ -60,7 +60,7 @@ func install(logger io.Writer) error {
 		{"helm", "repo", "add", "grafana", "https://grafana.github.io/helm-charts"},
 		{"helm", "repo", "update"},
 		{"helm", "upgrade", "--values", "../shared/kube-prometheus-helm.yaml", "--install", "kube-prometheus", "prometheus-community/kube-prometheus-stack", "-n", "monitoring", "--create-namespace"},
-		{"helm", "upgrade", "--values", "../loki-helm.yaml", "--install", "loki", "grafana/loki", "-n", "loki", "--create-namespace"},
+		{"helm", "upgrade", "--values", "../shared/loki-helm.yaml", "--install", "loki", "grafana/loki", "-n", "loki", "--create-namespace"},
 		{"helm", "upgrade", "--values", "promtail-helm.yaml", "--install", "promtail", "grafana/promtail", "-n", "promtail", "--create-namespace"},
 		{"kubectl", "apply", "-f", "../shared/nodeports.yaml"},
 		{"kubectl", "apply", "-f", "../shared/grafana-config.yaml"},
