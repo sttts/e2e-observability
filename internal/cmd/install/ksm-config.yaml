@@ -1,0 +1,52 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: kube-state-metrics-config
+  namespace: monitoring
+data:
+  ako: |
+    kind: CustomResourceStateMetrics
+    spec:
+      resources:
+        - groupVersionKind:
+            version: "*"
+            group: bigcorp.com
+            kind: Example
+          labelsFromPath:
+            name: [metadata, name]
+            namespace: [metadata, namespace]
+            kind: [kind]
+            version: [version]
+          metrics:
+            - name: "example_status"
+              each:
+                type: Gauge
+                gauge:
+                  path: [status, conditions]
+                  labelsFromPath:
+                    type: ["type"]
+                    status: ["status"]
+                  valueFrom: ["status"]
+    ---
+    kind: CustomResourceStateMetrics
+    spec:
+      resources:
+        - groupVersionKind:
+            version: "*"
+            group: bigcorp.com
+            kind: ExampleFoo
+          labelsFromPath:
+            name: [metadata, name]
+            namespace: [metadata, namespace]
+            kind: [kind]
+            version: [version]
+          metrics:
+            - name: "examplefoo_status"
+              each:
+                type: Gauge
+                gauge:
+                  path: [status, conditions]
+                  labelsFromPath:
+                    type: ["type"]
+                    status: ["status"]
+                  valueFrom: ["status"]
