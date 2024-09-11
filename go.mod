@@ -3,6 +3,7 @@ module github.com/sttts/e2e-observability
 go 1.22.4
 
 require (
+	github.com/alecthomas/kong v1.2.0
 	github.com/go-kit/kit v0.13.0
 	github.com/gogo/protobuf v1.3.2
 	github.com/golang/snappy v0.0.4

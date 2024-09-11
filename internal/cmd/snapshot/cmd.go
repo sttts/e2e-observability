@@ -2,11 +2,19 @@ package snapshot
 
 import (
 	"io"
+	"os"
 
 	"github.com/sttts/e2e-observability/internal/exec"
 )
 
-func Snapshot(logger io.Writer) error {
+type Command struct {
+}
+
+func (c *Command) Run() error {
+	return snapshot(os.Stderr)
+}
+
+func snapshot(logger io.Writer) error {
 	for _, cmdArgs := range [][]string{
 		// tell prometheus to take snapshot so WAL is flushed
 		{"curl", "-XPOST", "-v", `http://localhost:30000/api/v1/admin/tsdb/snapshot`},

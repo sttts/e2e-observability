@@ -10,7 +10,15 @@ import (
 	"github.com/sttts/e2e-observability/internal/exec"
 )
 
-func InstallLocalDevelopment(logger io.Writer, snapshotURL string) error {
+type Command struct {
+	SnapshotURL string `arg:"" help:"URL of the CI snapshot artifact."`
+}
+
+func (c *Command) Run() error {
+	return installLocalDevelopment(os.Stderr, c.SnapshotURL)
+}
+
+func installLocalDevelopment(logger io.Writer, snapshotURL string) error {
 	_, file, _, ok := runtime.Caller(0)
 	if !ok {
 		return fmt.Errorf("error getting caller information")

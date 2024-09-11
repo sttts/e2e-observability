@@ -28,7 +28,14 @@ var defaultBackOff = wait.Backoff{
 	Steps:    30 * 5,
 }
 
-func Install(logger io.Writer) error {
+type Command struct {
+}
+
+func (c *Command) Run() error {
+	return install(os.Stderr)
+}
+
+func install(logger io.Writer) error {
 	_, file, _, ok := runtime.Caller(0)
 	if !ok {
 		return fmt.Errorf("error getting caller information")

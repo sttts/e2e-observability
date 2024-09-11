@@ -2,7 +2,6 @@ package observe
 
 import (
 	"bufio"
-	"flag"
 	"fmt"
 	"io"
 	"os"
@@ -13,19 +12,17 @@ import (
 	"github.com/sttts/e2e-observability/internal/loki_reporter"
 )
 
-func Observe(cmdArgs ...string) error {
-	var (
-		lokiURL     string
-		lokiEnabled bool
-	)
+type Command struct {
+	LokiEnabled bool   `default:"true" name:"loki-enabled"`
+	LokiURL     string `default:"http://localhost:30002" name:"loki-url"`
 
-	flag.BoolVar(&lokiEnabled, "loki-enabled", true, "")
-	flag.StringVar(&lokiURL, "loki-url", "http://localhost:30002", "")
-	flag.Parse()
+	Arguments []string `arg:"" help:"Test command to observe and its arguments."`
+}
 
+func (c *Command) Run() error {
 	target := io.Discard
-	if lokiEnabled {
-		loki, err := loki_reporter.New(lokiURL, os.Stderr)
+	if c.LokiEnabled {
+		loki, err := loki_reporter.New(c.LokiURL, os.Stderr)
 		if err != nil {
 			return fmt.Errorf("error setting up loki: %w", err)
 		}
@@ -34,7 +31,7 @@ func Observe(cmdArgs ...string) error {
 
 	}
 
-	return forwardTo(target, cmdArgs...)
+	return forwardTo(target, c.Arguments...)
 }
 
 func forwardTo(target io.Writer, cmdArgs ...string) error {
